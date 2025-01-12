@@ -7,87 +7,107 @@ function generateMathExamples(count) {
     const operations = {
         '+': (a, b) => a + b,
         '-': (a, b) => a - b,
-        // '*': (a, b) => a * b,
-        // '/': (a, b) => (b !== 0 ? (a / b).toFixed(2) : 'undefined') // Avoid division by zero
     };
 
-    const operators = Object.keys(operations); // Array of operation symbols
+    const operators = Object.keys(operations);
     const examples = [];
 
     for (let i = 0; i < count; i++) {
         const num1 = Math.floor(Math.random() * 10);
         const num2 = Math.floor(Math.random() * 10) + 1;
         const operator = operators[Math.floor(Math.random() * operators.length)];
-
-        const result = operations[operator](num1, num2); // Execute the operation
-        examples.push(`${num1} ${operator} ${num2} =      `);
+        const result = operations[operator](num1, num2);
+        examples.push({ question: `${num1} ${operator} ${num2} =`, answer: result });
     }
 
     return examples;
 }
 
-// Generate 5 examples
-const examples = generateMathExamples(5
-);
+function printMathExamples(mathProblem) {
+    console.log(mathProblem.question);
+}
 
-// Print the examples
-examples.forEach((example, index) => {
-    console.log(`Example ${index + 1}: ${example}`);
-    const prompt = require('prompt-sync')();
+function getUsersAnswer() {
+    return parseInt(prompt('Napis spravny vysledek? '), 10);
+}
 
-    let result = prompt('Napis spravny vysledek? ');{
-
-        if (result = []) {
-            console.log("SPRAVNY vysledek");
-        } else {
-            console.log("Špatny vysledek");
-
-        }
-
+function vyhodnotOdpoved(mathProblem) {
+    let userAnswer = getUsersAnswer();
+    if (userAnswer === mathProblem.answer) {
+        console.log("SPRAVNY vysledek");
+        return true;
+    } else {
+        console.log("ŠPATNY vysledek");
+        return false;
     }
-});
+}
+
+function startTest() {
+    let result = [];
+    let examples = generateMathExamples(10);
+    examples.forEach((example) => {
+        printMathExamples(example);
+        let isCorrect = vyhodnotOdpoved(example);
+        result.push(isCorrect);
+    });
+
+    console.log("Results:", result);
+}
+
+startTest();
+
+
 
 // Otazky z Matematiky pro 2.ročnik
 function generateMathExamples1(count) {
     const operations1 = {
         '+': (a, b) => a + b,
         '-': (a, b) => a - b,
-        // '*': (a, b) => a * b,
-        // '/': (a, b) => (b !== 0 ? (a / b).toFixed(2) : 'undefined') // Avoid division by zero
     };
 
-    const operators1 = Object.keys(operations1); // Array of operation symbols
+    const operators1 = Object.keys(operations1);
     const examples1 = [];
 
     for (let i = 0; i < count; i++) {
         const num3 = Math.floor(Math.random() * 1000);
         const num4 = Math.floor(Math.random() * 1000) + 1;
         const operator1 = operators1[Math.floor(Math.random() * operators1.length)];
-
-        const result = operations1[operator1](num3, num4); // Execute the operation
-        examples1.push(`${num3} ${operator1} ${num4} =      `);
+        const result = operations1[operator1](num3, num4);
+        examples1.push({ question: `${num3} ${operator1} ${num4} =`, answer: result });
     }
 
     return examples1;
 }
 
-// Generate 5 examples
-const examples1 = generateMathExamples1(5
-);
+function printMathExamples1(mathProblem) {
+    console.log(mathProblem.question);
+}
 
-// Print the examples
-examples1.forEach((example1, index) => {
-    console.log(`Example ${index + 1}: ${example1}`);
-    const prompt = require('prompt-sync')();
+function getUsersAnswer1() {
+    return parseInt(prompt('Napis spravny vysledek? '), 10);
+}
 
-    let result = prompt('Napis spravny vysledek? ');{
-
-        if (result = []) {
-            console.log("SPRAVNY vysledek");
-        } else {
-            console.log("Špatny vysledek");
-
-        }
-
+function vyhodnotOdpoved1(mathProblem) {
+    let userAnswer = getUsersAnswer1();
+    if (userAnswer === mathProblem.answer) {
+        console.log("SPRAVNY vysledek");
+        return true;
+    } else {
+        console.log("ŠPATNY vysledek");
+        return false;
     }
-});
+}
+
+function startTest1() {
+    let result = [];
+    let examples1 = generateMathExamples1(5);
+    examples1.forEach((example1) => {
+        printMathExamples1(example1);
+        let isCorrect = vyhodnotOdpoved1(example1);
+        result.push(isCorrect);
+    });
+
+    console.log("Results:", result);
+}
+
+startTest1();
