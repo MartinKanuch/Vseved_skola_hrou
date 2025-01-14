@@ -1,5 +1,8 @@
+
 const prompt = require('prompt-sync')();
-const results = require('./results'); // Import the results module
+
+
+const results = require('./Results_Martin');
 
 // Function to generate random math examples
 function generateMathExamples(count) {
