@@ -1,0 +1,18 @@
+[
+  { "country": "France", "capital": "Paris", "cities": ["Lyon", "Marseille", "Nice"] },
+  { "country": "Germany", "capital": "Berlin", "cities": ["Munich", "Hamburg", "Frankfurt"] },
+  { "country": "Italy", "capital": "Rome", "cities": ["Milan", "Naples", "Turin"] },
+  { "country": "Spain", "capital": "Madrid", "cities": ["Barcelona", "Valencia", "Seville"] },
+  { "country": "United Kingdom", "capital": "London", "cities": ["Manchester", "Birmingham", "Liverpool"] },
+  { "country": "Netherlands", "capital": "Amsterdam", "cities": ["Rotterdam", "The Hague", "Utrecht"] },
+  { "country": "Sweden", "capital": "Stockholm", "cities": ["Gothenburg", "Malmö", "Uppsala"] },
+  { "country": "Norway", "capital": "Oslo", "cities": ["Bergen", "Trondheim", "Stavanger"] },
+  { "country": "Denmark", "capital": "Copenhagen", "cities": ["Aarhus", "Odense", "Aalborg"] },
+  { "country": "Poland", "capital": "Warsaw", "cities": ["Krakow", "Wroclaw", "Gdansk"] },
+  { "country": "Czech republic", "capital": "Prague", "cities": ["Brno", "Plzen", "Liberec"] },
+  { "country": "Austria", "capital": "Wienna", "cities": ["Salzburg", "Linz", "Wels"] },
+  { "country": "Austria", "capital": "Wienna", "cities": ["Salzburg", "Linz", "Wels"] },
+  { "country": "Switzerland", "capital": "Bern", "cities": ["Genova", "Biel", "Lausane"] },
+  { "country": "Srbia", "capital": "Beograd", "cities": ["Novi Sad", "Smederevo", "Nis"] },
+  { "country": "Litvia", "capital": "Vilnius", "cities": ["Kaunas", "Klaipeda", "Taurage"] },
+]
