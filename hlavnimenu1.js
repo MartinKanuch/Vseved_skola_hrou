@@ -29,27 +29,32 @@ function handleMainMenu(option) {
     } else if (option === "Zeměpis") {
         console.log("\nVybrali jste Zeměpis.");
         loadGeographyTest();
+      } else if (option === "Zobrazit výsledky") {
+    console.log("\nVybrali jste zobrazit výsledky.");
+    displayFinalResults();// Zavolání funkce pro zobrazení výsledků
     } else if (option === "Ukončit") {
         console.log("Ukončuji aplikaci. Nashledanou!");
         process.exit();
+    } else {
+        console.log("Neplatná volba, zkuste to znovu.");
     }
 }
 
-// Zpracování výběru z matematického menu
+
+// Funkce pro zpracování výběru z matematického menu
 function handleMathMenu(option) {
     if (option === "Matematický test 1") {
         console.log("Spouštím Matematický test 1...");
-        // Nevím, jak načíst otázky..
+        const examples = generateMathExamples(5); // Generuje 5 příkladů
+        startMathQuiz(examples); // Spustí kvíz s příklady
     } else if (option === "Matematický test 2") {
         console.log("Spouštím Matematický test 2...");
-
+        const examples = generateMathExamples(10); // Generuje 10 příkladů
+        startMathQuiz(examples); // Spustí kvíz s příklady
     } else if (option === "Zpět") {
         displayMenu(mainMenu, handleMainMenu);
     }
 }
-
-// Načtení testu ze zeměpisu - jak ho načtem?
-
 
 // Zobrazení testu ze zeměpisu
 function displayGeographyTest(questions) {
@@ -62,88 +67,15 @@ function displayGeographyTest(questions) {
 }
 
 // Hlavní menu
-const mainMenu = ["Matematika", "Zeměpis", "Ukončit"];
+const mainMenu = ["Matematika", "Zeměpis", "Zobrazit výsledky", "Ukončit"];
 
 // Spuštění programu
-console.log("Vítejte ve vzdělávacím kvízu!");
+console.log("Vítejte ve vzdělávacím kvízu! Vyber předmět, kterému se chceš věnovat.");
 displayMenu(mainMenu, handleMainMenu);
 
 
 
 
-
-// Pokus o napojení na matematiku :-)
-
-
-
-function startQuiz(callback) { // Add callback as a parameter
-    let continueQuiz = true;
-
-    // Object to keep track of results
-    const results = {
-        correct: 0,
-        wrong: 0,
-        incrementCorrect() {
-            this.correct++;
-        },
-        incrementWrong() {
-            this.wrong++;
-        },
-        getSummary() {
-            return { correct: this.correct, wrong: this.wrong };
-        }
-    };
-
-    while (continueQuiz) {
-        console.log('\nStarting a new set of questions...\n');
-
-        const examples = generateMathExamples(5); // Generuje příklady
-
-        examples.forEach((example, index) => {
-            const { question, answer } = example;
-            const userInput = prompt(`Example ${index + 1}: ${question}`);
-            const userAnswer = parseFloat(userInput);
-
-            if (userAnswer === answer) {
-                console.log('Correct!');
-                results.incrementCorrect();
-            } else {
-                console.log(`Wrong! The correct answer is ${answer}`);
-                results.incrementWrong();
-            }
-            console.log('');
-        });
-
-        // Zapíše výsledky do results.json
-        const resultsSummary = results.getSummary();
-        fs.writeFileSync('result.json', JSON.stringify(resultsSummary, null, 2), 'utf8');
-        console.log('Results have been saved to results.json.');
-
-        // Ask if the user wants to continue
-        const userChoice = prompt('Do you want to continue? (yes/no): ').toLowerCase();
-        continueQuiz = userChoice === 'yes' || userChoice === 'y';
-    }
-
-    console.log('\nReturning to main menu...\n');
-    if (callback) callback(); // návrat do hlavního menu
-}
-
-// Example function to generate math examples
-function generateMathExamples(count) {
-    const examples = [];
-    for (let i = 0; i < count; i++) {
-        const num1 = Math.floor(Math.random() * 10);
-        const num2 = Math.floor(Math.random() * 10);
-        examples.push({
-            question: `${num1} + ${num2} = `,
-            answer: num1 + num2
-        });
-    }
-    return examples;
-}
-
-// Export the function for external use
-module.exports.startQuiz = startQuiz;
 
 
 
