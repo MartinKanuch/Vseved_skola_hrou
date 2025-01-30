@@ -1,9 +1,9 @@
-const prompt = require('prompt-sync')();
+const prompt = require("prompt-sync")();
 const fs = require("fs");
 
-function startQuiz(callback) {
+function startQuiz(testType, callback) {
     let continueQuiz = true;
-    let dailyTestCount = 1;
+    let testCount = 1;
 
     const results = {
         correct: 0,
@@ -19,13 +19,10 @@ function startQuiz(callback) {
         }
     };
 
-    let currentDate = formatDate(new Date());
-
     while (continueQuiz) {
-        console.log(`\nStarting quiz set #${dailyTestCount}...\n`);
+        console.log(`\nStarting ${testType} Test #${testCount}...\n`);
 
         const examples = generateMathExamples(5);
-
         examples.forEach((example, index) => {
             const { question, answer } = example;
             const userInput = prompt(`Example ${index + 1}: ${question}`);
@@ -40,32 +37,41 @@ function startQuiz(callback) {
             }
             console.log('');
         });
+
         const summary = results.getSummary();
-        console.log(`Correct answers: ${summary.correct}, Wrong answers: ${summary.wrong}`);
-        console.log('');
+        console.log(`Correct answers: ${summary.correct}, Wrong answers: ${summary.wrong}\n`);
 
-        const newDate = formatDate(new Date());
-        if (newDate !== currentDate) {
-            dailyTestCount = 1;
-            currentDate = newDate;
-        } else {
-            dailyTestCount++;
-        }
-
-        // Structure the data for saving
+        const currentDate = formatDate(new Date());
         const resultData = {
-            date: currentDate,             // The current date in dd-mm-yyyy format
-            testNumber: dailyTestCount,    // Number of quiz sets (tests) executed today
-            correct: results.correct,      // Number of correct answers
-            wrong: results.wrong          // Number of wrong answers
+            testNumber: testCount.toString(),
+            correct: results.correct,
+            wrong: results.wrong,
+            date: currentDate,
         };
 
-        // Append results to result.json
-        fs.appendFileSync('math2.json', JSON.stringify(resultData, null, 2) + '\n', 'utf8');
+        let existingData = [];
+        const filePath = testType === "Math1" ? 'math1.json' : 'math2.json';
 
+        if (fs.existsSync(filePath)) {
+            try {
+                const fileContent = fs.readFileSync(filePath, 'utf8');
+                existingData = fileContent ? JSON.parse(fileContent) : [];
+            } catch (error) {
+                console.error('Error reading results file, initializing new data:', error);
+                existingData = [];
+            }
+        }
+        existingData.push(resultData);
+        fs.writeFileSync(filePath, JSON.stringify(existingData, null, 2), 'utf8');
 
-        const userChoice = prompt('Do you want to continue? (yes/no): ').toLowerCase();
-        continueQuiz = userChoice === 'yes' || userChoice === 'y';
+        testCount++;
+
+        let userChoice;
+        do {
+            userChoice = prompt('Do you want to continue? (yes/no): ').trim().toLowerCase();
+        } while (!["yes", "y", "no", "n"].includes(userChoice));
+
+        continueQuiz = userChoice.startsWith('y');
 
         results.correct = 0;
         results.wrong = 0;
@@ -78,8 +84,8 @@ function startQuiz(callback) {
 function generateMathExamples(count) {
     const examples = [];
     for (let i = 0; i < count; i++) {
-        const num1 = Math.floor(Math.random() * 1000);
-        const num2 = Math.floor(Math.random() * 1000);
+        const num1 = Math.floor(Math.random() * 100);
+        const num2 = Math.floor(Math.random() * 100);
         examples.push({
             question: `${num1} + ${num2} = `,
             answer: num1 + num2
@@ -88,13 +94,8 @@ function generateMathExamples(count) {
     return examples;
 }
 
-// Function to format date as day-month-year (e.g., "18-01-2025")
 function formatDate(date) {
-    const day = String(date.getDate()).padStart(2, '0'); // Ensure day is two digits (e.g., "03" instead of "3")
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Ensure month is two digits (e.g., "01" instead of "1")
-    const year = date.getFullYear();  // Get the full year (e.g., "2025")
-    return `${day}-${month}-${year}`;
+    return date.toISOString().split('T')[0];
 }
-
 
 module.exports.startQuiz = startQuiz;

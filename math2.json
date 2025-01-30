@@ -1,6 +1,14 @@
-{
-  "date": "19-01-2025",
-  "testNumber": 2,
-  "correct": 4,
-  "wrong": 1
-}
+[
+  {
+    "date": "19-01-2025",
+    "testNumber": 2,
+    "correct": 4,
+    "wrong": 1
+  },
+  {
+    "testNumber": "1",
+    "correct": 0,
+    "wrong": 5,
+    "date": "2025-01-30"
+  }
+]
