@@ -1,7 +1,7 @@
 const fs = require("fs");
 const prompt = require("prompt-sync")();
 
-// cita data z geography data.json
+// Load city data from JSON
 let countriesAndCities = [];
 try {
     const data = fs.readFileSync("geography_data.json", "utf8");
@@ -11,7 +11,7 @@ try {
     process.exit(1);
 }
 
-// Function to generate a random question
+// Generate a random capital city question
 function generateCapitalCityQuestion() {
     const randomIndex = Math.floor(Math.random() * countriesAndCities.length);
     const selectedCountry = countriesAndCities[randomIndex];
@@ -26,7 +26,7 @@ function generateCapitalCityQuestion() {
     };
 }
 
-// Utility to shuffle options
+// Shuffle options
 function shuffleArray(arr) {
     for (let i = arr.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -35,9 +35,24 @@ function shuffleArray(arr) {
     return arr;
 }
 
-// Conduct geography test
-function startGeographyTest(testNumber, mainMenuCallback) {
-    console.log(`\nStarting Geography Test ${testNumber}. Answer 5 questions!\n`);
+function startGeographyTest(mainMenuCallback) {
+    const fileName = "geography_results.json";
+    let existingResults = [];
+
+    // Read existing results to determine the next test number
+    if (fs.existsSync(fileName)) {
+        try {
+            const fileContent = fs.readFileSync(fileName, "utf8");
+            existingResults = fileContent ? JSON.parse(fileContent) : [];
+        } catch (error) {
+            console.error("Error reading results file, initializing new data:", error);
+            existingResults = [];
+        }
+    }
+
+    let testNumber = existingResults.length + 1; // Assign next available test number
+
+    console.log(`\nStarting Geography Test #${testNumber}. Answer 5 questions!\n`);
 
     let correctAnswers = 0;
     let wrongAnswers = 0;
@@ -65,28 +80,40 @@ function startGeographyTest(testNumber, mainMenuCallback) {
     console.log("\nTest completed!");
     console.log(`Correct: ${correctAnswers}, Wrong: ${wrongAnswers}`);
 
-    // Ask if the user wants to repeat the test or return to the menu
-    const nextAction = prompt("Do you want to take a new test (y) or return to the menu (m)? ").toLowerCase();
+    let userChoice;
+    do {
+        userChoice = prompt('Do you want to continue? (yes/no): ').trim().toLowerCase();
+    } while (!["yes", "y", "no", "n"].includes(userChoice));
 
-    if (nextAction === "y") {
-        startGeographyTest(testNumber + 1, mainMenuCallback);
-    } else if (nextAction === "m") {
-        mainMenuCallback();
+    if (userChoice.startsWith('y')) {
+        startGeographyTest(mainMenuCallback); // Restart test if user chooses to continue
     } else {
-        console.log("Invalid choice. Returning to the menu.");
-        mainMenuCallback();
+        console.log("\nReturning to the main menu...\n");
+        mainMenuCallback(); // Return to the main menu if the user chooses not to continue
     }
 }
 
+
+// Save test results
 function saveResults(testNumber, correct, wrong) {
     const date = new Date().toLocaleDateString("en-GB");
-    const result = { date, testNumber, correct, wrong };
+    const result = { testNumber, date, correct, wrong };
 
     const fileName = "geography_results.json";
-    let results = JSON.parse(fs.readFileSync(fileName, "utf8"));
+    let results = [];
 
-    results.push(result); // Add the new result
-    fs.writeFileSync(fileName, JSON.stringify(results, null, 4), "utf8"); // ulozi nove data
+    if (fs.existsSync(fileName)) {
+        try {
+            const fileContent = fs.readFileSync(fileName, "utf8");
+            results = fileContent ? JSON.parse(fileContent) : [];
+        } catch (error) {
+            console.error("Error reading results file, initializing new data:", error);
+            results = [];
+        }
+    }
+
+    results.push(result); // Add the new test result
+    fs.writeFileSync(fileName, JSON.stringify(results, null, 4), "utf8"); // Save new data
     console.log(`Results saved to ${fileName}`);
 }
 

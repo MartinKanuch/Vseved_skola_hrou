@@ -14,5 +14,5 @@
   { "country": "Austria", "capital": "Wienna", "cities": ["Salzburg", "Linz", "Wels"] },
   { "country": "Switzerland", "capital": "Bern", "cities": ["Genova", "Biel", "Lausane"] },
   { "country": "Srbia", "capital": "Beograd", "cities": ["Novi Sad", "Smederevo", "Nis"] },
-  { "country": "Litvia", "capital": "Vilnius", "cities": ["Kaunas", "Klaipeda", "Taurage"] },
+  { "country": "Litvia", "capital": "Vilnius", "cities": ["Kaunas", "Klaipeda", "Taurage"] }
 ]
