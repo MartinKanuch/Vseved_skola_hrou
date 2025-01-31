@@ -4,7 +4,7 @@ const prompt = require('prompt-sync')(); // You need to install prompt-sync in y
 const historyesAndCities = [
     { history: "Kdo byl prvním Přemyslovcem, kterého řadíme mezi takzvané poslední", deje: "Přemysl Otakar I", cities: ["Spytihněv"] },
     { history: "Který titul chtěl získat Přemysl Otakar II", deje: "římsko-německý král", cities: ["anglický císař"] },
-    { history: "Ve kterém roce začal vládnout Přemysl Otakar I", deje: "12", cities: ["17"] },
+    { history: "Ve kterém století začal vládnout Přemysl Otakar I", deje: "12", cities: ["17"] },
     { history: "V jakém přibuzemském vztahu byl Ota Braniborský k Václavu II", deje: "bratranec", cities: ["děd"] },
     { history: "Ve které bitvě v roce 1278 padl Přemysl Otakar II", deje: "na Moravském poli", cities: ["u Lipna"] },
     { history: "Které mince se začaly razit za krále Václava II", deje: "groše", cities: ["halíře"] },
