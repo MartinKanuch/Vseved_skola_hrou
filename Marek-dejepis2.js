@@ -14,6 +14,20 @@ const historyesAndCities = [
     { history: "Který panovník vydal horní zákoník", deje: "Václav II", cities: ["Svatopluk"] },
     { history: "Jak dlouho vládl Vaclav III", deje: "jeden rok", cities: ["15 let"] },
     { history: "Který císař vydal Zlatou bulu sicilskou", deje: "Fridrich II", cities: ["Rudolf II"] },
+    { history: "Byla Praha za vlády Karla IV. největším městem střední Evropy", deje: "ano", cities: ["ne"] },
+    { history: "Kdo byl jeho otec", deje: "Jan Lucemburský", cities: ["Zikmund Lucemburský"] },
+    { history: "Jak se říkalo Karlovi IV.", deje: "Otec vlasti", cities: ["Mist meče"] },
+    { history: "Kolik měl manželek", deje: "4", cities: ["2"] },
+    { history: "Kdo vládl před Karlem IV.", deje: "Jan Lucemburský", cities: ["Bořivoj"] },
+    { history: "Co nechal postavit Karel IV. v Praze během hladomoru", deje: "Hladovou zeď", cities: ["Chlebové sádky"] },
+    { history: "Co nechal Karel IV. postavit", deje: "katedrála sv. Víta", cities: ["katedrála sv. Mořice"] },
+    { history: "Jak se jmenuje uneverzita založena Karlem IV.", deje: "Karlova", cities: ["Pražská"] },
+    { history: "K čemu slouží svatováclavská koruna vyrobená na přání Karla IV.?", deje: "ke korunovaci", cities: ["ke každodennímu nošení"] },
+    { history: "Povedlo se mu v českých zemích vydat zákoník", deje: "ne", cities: ["ano"] },
+    { history: "Byl za života svého otce jeho spoluvládcem", deje: "ano", cities: ["ne"] },
+    { history: "Kolik kolejí měla Karlova univerzita při svém založení", deje: "4", cities: ["2"] },
+    { history: "Zemřel Karel IV. v bitvě", deje: "ne", cities: ["ano"] },
+
 ];
 
 // Function to generate a random question
