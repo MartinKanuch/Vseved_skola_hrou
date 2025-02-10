@@ -1,18 +1,17 @@
 const fs = require("fs");
 const chalk = require("chalk");
 
-
-// Function to display results of each test
+//  results of the last 3 tests
 function displayResultsOfEachTest(filePath, callback) {
     if (!fs.existsSync(filePath)) {
         console.log(chalk.yellow(`No results found for ${filePath}.`));
-        return;
+        return callback(); // Return to results menu
     }
 
     fs.readFile(filePath, 'utf8', (err, data) => {
         if (err) {
             console.error(chalk.red("Error reading the file:"), err);
-            return;
+            return callback();
         }
 
         let results;
@@ -20,16 +19,19 @@ function displayResultsOfEachTest(filePath, callback) {
             results = JSON.parse(data.trim() || '[]');
         } catch (error) {
             console.error(chalk.red("Error parsing JSON data."), error);
-            return;
+            return callback();
         }
 
         if (!Array.isArray(results) || results.length === 0) {
             console.log(chalk.yellow("No test results available."));
-            return;
+            return callback();
         }
 
-        console.log(chalk.blue("\n--- Results of Each Test ---"));
-        results.forEach(({ correct, wrong, testNumber, date }) => {
+        // Get  last 3 test results
+        const lastThreeResults = results.slice(-3);
+
+        console.log(chalk.blue("\n--- Results of the Last 3 Tests ---"));
+        lastThreeResults.forEach(({ correct, wrong, testNumber, date }) => {
             const total = correct + wrong;
             const percentageCorrect = total === 0 ? 0 : (correct / total) * 100;
             const percentageWrong = total === 0 ? 0 : (wrong / total) * 100;
@@ -44,21 +46,21 @@ function displayResultsOfEachTest(filePath, callback) {
             console.log(`Graphical Representation:\n[${chalk.green("Correct")}] ${correctBar}\n[${chalk.red("Wrong  ")}] ${wrongBar}`);
         });
 
-        if (callback) callback();
+        callback();
     });
 }
 
-// Function to display overall results (summary of all tests)
+// Function to display overall results
 function displayOverallResults(filePath, callback) {
     if (!fs.existsSync(filePath)) {
         console.log(chalk.yellow(`No results found for ${filePath}.`));
-        return;
+        return callback();
     }
 
     fs.readFile(filePath, 'utf8', (err, data) => {
         if (err) {
             console.error(chalk.red("Error reading the file:"), err);
-            return;
+            return callback();
         }
 
         let results;
@@ -66,12 +68,12 @@ function displayOverallResults(filePath, callback) {
             results = JSON.parse(data.trim() || '[]');
         } catch (error) {
             console.error(chalk.red("Error parsing JSON data."), error);
-            return;
+            return callback();
         }
 
         if (!Array.isArray(results) || results.length === 0) {
             console.log(chalk.yellow("No test results available."));
-            return;
+            return callback();
         }
 
         // Overall tests
@@ -90,7 +92,7 @@ function displayOverallResults(filePath, callback) {
         console.log(`Total Wrong  : ${chalk.red(totalWrong)} (${chalk.red(totalPercentageWrong.toFixed(2) + '%')})`);
         console.log(`Graphical Representation:\n[${chalk.green("Correct")}] ${totalCorrectBar}\n[${chalk.red("Wrong  ")}] ${totalWrongBar}`);
 
-        if (callback) callback();
+        callback();
     });
 }
 

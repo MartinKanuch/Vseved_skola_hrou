@@ -3,15 +3,26 @@ const { startGeographyTest } = require("./geography.js");
 const math1 = require("./math1.js");
 const math2 = require("./math2.js");
 const { displayResultsOfEachTest, displayOverallResults } = require('./result.js');
+const history1 = require("./history1.js");
+const history2 = require("./history2.js");
+const { displayBadgesMenu } = require("./badges.js");
 
+// result files
+const resultFiles = {
+    "Geography_results": "geography_results.json",
+    "Math1_results": "math1.json",
+    "Math2_results": "math2.json",
+    "History1_results": "history1_results.json",
+    "History2_results": "history2_results.json"
+};
 
-
-// Menu
-const mainMenu = ["Mathematics", "Geography", "Results", "Exit"];
+// Menu options
+const mainMenu = ["Geography", "Mathematics", "History", "Results", "Badges", "Exit"];
 const mathMenu = ["Math Test 1", "Math Test 2"];
-const resultsMenu = ["Math Test 1 Results", "Math Test 2 Results", "Geography Results", "Back"];
-
-//  display menu
+const histMenu = ["History Test 1", "History Test 2"];
+const resultsMenu = [...Object.keys(resultFiles), "Back"];
+console.log('');
+// display menu and  user input
 function displayMenu(options, callback) {
     console.log("\nPlease choose an option:");
     options.forEach((option, index) => {
@@ -28,100 +39,53 @@ function displayMenu(options, callback) {
         }
     }
 
-    const selected = options[choice - 1];
-    if (selected) {
-        callback(selected);
-    }
+    callback(options[choice - 1]);
 }
 
-// main menu selection
+// Main menu
 function handleMainMenu(option) {
     if (option === "Mathematics") {
         displayMenu(mathMenu, handleMathMenu);
     } else if (option === "Geography") {
-        startGeographyTest(() => {
-            console.log("\nReturning to the main menu...");
-            displayMenu(mainMenu, handleMainMenu);  // Correctly pass the callback
-        });
+        startGeographyTest(() => displayMenu(mainMenu, handleMainMenu));
+    } else if (option === "History") {
+        displayMenu(histMenu, handleHistoryMenu);
     } else if (option === "Results") {
-        const resultsMenu = ["Math Test 1 Results", "Math Test 2 Results", "Geography Results", "Back"];
         displayMenu(resultsMenu, handleResultsMenu);
+    } else if (option === "Badges") {
+        displayBadgesMenu(() => displayMenu(mainMenu, handleMainMenu));
     } else if (option === "Exit") {
+        console.log('');
         console.log("Thank you for using the Education Quiz. Goodbye!");
         process.exit();
     }
 }
 
-
+// Results menu
 function handleResultsMenu(choice) {
-    if (choice === "Math Test 1 Results") {
-        displayMenu(["Each test result", "Overall results", "Back"], (subChoice) => {
-            if (subChoice === "Each test result") {
-                displayResultsOfEachTest('math1.json', () => {
-                    console.log("\nReturning to the main menu...");
-                    displayMenu(mainMenu, handleMainMenu);
-                });
-            } else if (subChoice === "Overall results") {
-                displayOverallResults('math1.json', () => {
-                    console.log("\nReturning to the main menu...");
-                    displayMenu(mainMenu, handleMainMenu);
-                });
-            } else if (subChoice === "Back") {
-                console.log("\nReturning to the main menu...");
-                displayMenu(mainMenu, handleMainMenu);
-            }
-        });
-    } else if (choice === "Math Test 2 Results") {
-        displayMenu(["Each test result", "Overall results", "Back"], (subChoice) => {
-            if (subChoice === "Each test result") {
-                displayResultsOfEachTest('math2.json', () => {
-                    console.log("\nReturning to the main menu...");
-                    displayMenu(mainMenu, handleMainMenu);
-                });
-            } else if (subChoice === "Overall results") {
-                displayOverallResults('math2.json', () => {
-                    console.log("\nReturning to the main menu...");
-                    displayMenu(mainMenu, handleMainMenu);
-                });
-            } else if (subChoice === "Back") {
-                console.log("\nReturning to the main menu...");
-                displayMenu(mainMenu, handleMainMenu);
-            }
-        });
-    } else if (choice === "Geography Results") {
-        displayMenu(["Each test result", "Overall results", "Back"], (subChoice) => {
-            if (subChoice === "Each test result") {
-                displayResultsOfEachTest('geography_results.json', () => {
-                    console.log("\nReturning to the main menu...");
-                    displayMenu(mainMenu, handleMainMenu);
-                });
-            } else if (subChoice === "Overall results") {
-                displayOverallResults('geography_results.json', () => {
-                    console.log("\nReturning to the main menu...");
-                    displayMenu(mainMenu, handleMainMenu);
-                });
-            } else if (subChoice === "Back") {
-                console.log("\nReturning to the main menu...");
-                displayMenu(mainMenu, handleMainMenu);
-            }
-        });
-    } else if (choice === "Each test result") {
-        displayOverallResults('geography_results.json', 3, () => {
-            console.log("\nReturning to the main menu...");
-            displayMenu(mainMenu, handleMainMenu);
-        });
-    } else if (choice === "Overall results") {
-        displayOverallResults('geography_results.json', () => {
-            console.log("\nReturning to the main menu...");
-            displayMenu(mainMenu, handleMainMenu);
-        });
-    } else if (choice === "Back") {
-        console.log("\nReturning to the main menu...");
+    if (choice === "Back") {
         displayMenu(mainMenu, handleMainMenu);
+        return;
+    }
+
+    function returnToTestResultsMenu(testFile) {
+        displayMenu(["Each test result", "Overall results", "Back"], (subChoice) => {
+            if (subChoice === "Each test result") {
+                displayResultsOfEachTest(testFile, () => returnToTestResultsMenu(testFile));
+            } else if (subChoice === "Overall results") {
+                displayOverallResults(testFile, () => returnToTestResultsMenu(testFile));
+            } else {
+                displayMenu(resultsMenu, handleResultsMenu);
+            }
+        });
+    }
+
+    if (resultFiles[choice]) {
+        returnToTestResultsMenu(resultFiles[choice]);
     }
 }
 
-// math menu selection
+// Math menu
 function handleMathMenu(option) {
     if (option === "Math Test 1") {
         math1.startQuiz("Math 1", () => {
@@ -136,7 +100,24 @@ function handleMathMenu(option) {
     }
 }
 
-// Start
+// History menu
+function handleHistoryMenu(option) {
+    if (option === "History Test 1") {
+        history1.startHistoryTest1(() => {
+            console.log("\nReturning to the main menu...");
+            displayMenu(mainMenu, handleMainMenu);
+        });
+    } else if (option === "History Test 2") {
+        history2.startHistoryTest2(() => {
+            console.log("\nReturning to the main menu...");
+            displayMenu(mainMenu, handleMainMenu);
+        });
+    }
+}
+
+// Start app
 console.log("Welcome to the Education Quiz!");
 displayMenu(mainMenu, handleMainMenu);
+
+
 

@@ -1,7 +1,7 @@
 const fs = require("fs");
 const prompt = require("prompt-sync")();
 
-// Load city data from JSON
+// Load data from JSON
 let countriesAndCities = [];
 try {
     const data = fs.readFileSync("geography_data.json", "utf8");
@@ -11,7 +11,7 @@ try {
     process.exit(1);
 }
 
-// Generate a random capital city question
+// Generate random  city question
 function generateCapitalCityQuestion() {
     const randomIndex = Math.floor(Math.random() * countriesAndCities.length);
     const selectedCountry = countriesAndCities[randomIndex];
@@ -74,27 +74,28 @@ function startGeographyTest(mainMenuCallback) {
             console.log(`Wrong! The correct answer was Option ${questionObj.correctAnswerIndex}.`);
             wrongAnswers++;
         }
+        console.log('');
     }
 
     saveResults(testNumber, correctAnswers, wrongAnswers);
     console.log("\nTest completed!");
     console.log(`Correct: ${correctAnswers}, Wrong: ${wrongAnswers}`);
-
+console.log('');
     let userChoice;
     do {
         userChoice = prompt('Do you want to continue? (yes/no): ').trim().toLowerCase();
     } while (!["yes", "y", "no", "n"].includes(userChoice));
 
     if (userChoice.startsWith('y')) {
-        startGeographyTest(mainMenuCallback); // Restart test if user chooses to continue
+        startGeographyTest(mainMenuCallback);
     } else {
         console.log("\nReturning to the main menu...\n");
-        mainMenuCallback(); // Return to the main menu if the user chooses not to continue
+        mainMenuCallback();
     }
 }
 
 
-// Save test results
+// Save  results
 function saveResults(testNumber, correct, wrong) {
     const date = new Date().toLocaleDateString("en-GB");
     const result = { testNumber, date, correct, wrong };
@@ -114,7 +115,6 @@ function saveResults(testNumber, correct, wrong) {
 
     results.push(result); // Add the new test result
     fs.writeFileSync(fileName, JSON.stringify(results, null, 4), "utf8"); // Save new data
-    console.log(`Results saved to ${fileName}`);
-}
+    }
 
 module.exports = { startGeographyTest };

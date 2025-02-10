@@ -3,7 +3,6 @@ const fs = require("fs");
 
 function startQuiz(testType, callback) {
     let continueQuiz = true;
-    let testCount = 1;
 
     const results = {
         correct: 0,
@@ -18,6 +17,22 @@ function startQuiz(testType, callback) {
             return { correct: this.correct, wrong: this.wrong };
         }
     };
+
+    const filePath = testType === "Math 1" ? 'math1.json' : 'math2.json';
+    let existingData = [];
+
+
+    if (fs.existsSync(filePath)) {
+        try {
+            const fileContent = fs.readFileSync(filePath, 'utf8');
+            existingData = fileContent ? JSON.parse(fileContent) : [];
+        } catch (error) {
+            console.error('Error reading results file, initializing new data:', error);
+            existingData = [];
+        }
+    }
+
+    let testCount = existingData.length + 1; // Determine next test number
 
     while (continueQuiz) {
         console.log(`\nStarting ${testType} Test #${testCount}...\n`);
@@ -43,24 +58,12 @@ function startQuiz(testType, callback) {
 
         const currentDate = formatDate(new Date());
         const resultData = {
-            testNumber: testCount.toString(),
+            testNumber: testCount,
             correct: results.correct,
             wrong: results.wrong,
             date: currentDate,
         };
 
-        let existingData = [];
-        const filePath = testType === "Math 1" ? 'math1.json' : 'math2.json';
-
-        if (fs.existsSync(filePath)) {
-            try {
-                const fileContent = fs.readFileSync(filePath, 'utf8');
-                existingData = fileContent ? JSON.parse(fileContent) : [];
-            } catch (error) {
-                console.error('Error reading results file, initializing new data:', error);
-                existingData = [];
-            }
-        }
         existingData.push(resultData);
         fs.writeFileSync(filePath, JSON.stringify(existingData, null, 2), 'utf8');
 
@@ -73,6 +76,7 @@ function startQuiz(testType, callback) {
 
         continueQuiz = userChoice.startsWith('y');
 
+        // Reset results for the next test
         results.correct = 0;
         results.wrong = 0;
     }
@@ -99,6 +103,7 @@ function formatDate(date) {
 }
 
 module.exports.startQuiz = startQuiz;
+
 
 
 
